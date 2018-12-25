@@ -99,3 +99,24 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
+
+def update_avatar():
+    """
+    allows the user to select another avatar
+    """
+    url = request.vars.redirect
+    rv = request.vars
+    user_id = auth.user.id
+    if auth.user:
+        avatar = db(db.avatar.user_id == auth.user.id).select().first()
+        if avatar is not None:
+            db(db.avatar.user_id==auth.user.id).update(
+                image = 'img/'+rv.avatar
+            )
+        else:
+            db.avatar.insert(
+                user_id = auth.user.id,
+                image = 'img/'+rv.avatar
+            )
+    redirect(url)
+    return locals()

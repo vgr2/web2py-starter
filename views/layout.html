@@ -66,7 +66,17 @@
   middle_column = {0: mc0, 1: mc1, 2: mc2}[
   (left_sidebar_enabled and 1 or 0)+(right_sidebar_enabled and 1 or 0)]
   }}
-
+  <style type="text/css" media="screen">
+    .navbar-nav>.user-menu>.dropdown-menu>li.user-header>a>img,
+    #update_avatar > div > div > div.modal-body > div > a > img {
+        z-index: 5;
+        height: 90px;
+        width: 90px;
+        border: 3px solid;
+        border-color: transparent;
+        border-color: rgba(255,255,255,0.2);
+    }
+  </style>
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -174,7 +184,12 @@ desired effect
                 <!-- Menu Toggle Button -->
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <!-- The user image in the navbar-->
-                  <img src="{{=URL('static','img/avatar5.png')}}" class="user-image" alt="User Image">
+                  {{avatar = db(db.avatar.user_id == auth.user.id).select().first()}}
+                  {{if avatar is not None:}}
+                    <img src="{{=URL('static', avatar.image)}}" class="user-image" alt="User Image">
+                  {{else:}}
+                    <img src="{{=URL('static', 'img/avatar5.png')}}" class="user-image" alt="User Image">
+                  {{pass}}
                   <!-- hidden-xs hides the username on small devices so only the image appears. -->
                   <span class="hidden-xs">{{=auth.user.first_name}} {{=auth.user.last_name}} <span class="caret"></span></span>
                 </a>
@@ -182,7 +197,14 @@ desired effect
                 <ul class="dropdown-menu">
                   <!-- User Menu Header -->
                   <li class="user-header">
-                    <img src="{{=URL('static','img/avatar5.png')}}" class="img-circle" alt="User Image">
+                    <a href="#" data-toggle="modal" data-target="#update_avatar">
+                    {{if avatar:}}
+                      <img src="{{=URL('static', avatar.image)}}" class="img-circle" alt="User Image">
+                    {{else:}}
+                        <img src="{{=URL('static','img/avatar5.png')}}" class="img-circle" alt="User Image">
+                    {{pass}}
+                  </a>
+
                     <p>
                       {{=auth.user.first_name}} {{=auth.user.last_name}}
                       <small>{{=' | '.join(auth.user_groups.values())}}</small>
@@ -255,7 +277,11 @@ desired effect
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel">
               <div class="pull-left image">
-                  <img src="{{=URL('static','img/avatar5.png')}}" class="img-circle" alt="User Image">
+                {{if avatar:}}
+                  <img src="{{=URL('static', avatar.image)}}" class="img-circle" alt="User Image">
+                {{else:}}
+                    <img src="{{=URL('static','img/avatar5.png')}}" class="img-circle" alt="User Image">
+                {{pass}}
               </div>
               <div class="pull-left info">
                   <p>
@@ -346,6 +372,79 @@ desired effect
           {{block center}}
             {{include}}
           {{end}}
+          {{avatar_links=DIV(
+            A(
+              IMG(_src=URL('static', 'img/avatar.png'), _class='img-circle', _alt='User Image'),
+              _href=URL(
+                'default',
+                'update_avatar',
+                args=request.args,
+                vars=dict(
+                  redirect = XML(URL(request.controller, request.function, args=request.args)),
+                  avatar = 'avatar.png'
+                )
+              )
+            ),
+
+            A(
+              IMG(_src=URL('static', 'img/avatar2.png'), _class='img-circle', _alt='User Image'),
+              _href=URL(
+                'default',
+                'update_avatar',
+                args=request.args,
+                vars=dict(
+                  redirect = XML(URL(request.controller, request.function, args=request.args)),
+                  avatar = 'avatar2.png'
+                )
+              )
+            ),
+
+            A(
+              IMG(_src=URL('static', 'img/avatar3.png'), _class='img-circle', _alt='User Image'),
+              _href=URL(
+                'default',
+                'update_avatar',
+                args=request.args,
+                vars=dict(
+                  redirect = XML(URL(request.controller, request.function, args=request.args)),
+                  avatar = 'avatar3.png'
+                )
+              )
+            ),
+
+            A(
+              IMG(_src=URL('static', 'img/avatar4.png'), _class='img-circle', _alt='User Image'),
+              _href=URL(
+                'default',
+                'update_avatar',
+                args=request.args,
+                vars=dict(
+                  redirect = XML(URL(request.controller, request.function, args=request.args)),
+                  avatar = 'avatar4.png'
+                )
+              )
+            ),
+
+            A(
+              IMG(_src=URL('static', 'img/avatar5.png'), _class='img-circle', _alt='User Image'),
+              _href=URL(
+                'default',
+                'update_avatar',
+                args=request.args,
+                vars=dict(
+                  redirect = XML(URL(request.controller, request.function, args=request.args)),
+                  avatar = 'avatar5.png'
+                )
+              )
+            ),
+
+          )}}
+          {{=get_modal(
+            'update_avatar',
+            'Change Avatar',
+            avatar_links,
+            'sm'
+            )}}
         </div>
 
         {{if right_sidebar_enabled:}}
