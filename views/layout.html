@@ -30,7 +30,7 @@
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect.
   -->
-  <link rel="stylesheet" href="{{=URL('static','css/skins/skin-blue.min.css')}}">
+  <link rel="stylesheet" href="{{=URL('static','css/skins/_all-skins.min.css')}}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -66,7 +66,17 @@
   middle_column = {0: mc0, 1: mc1, 2: mc2}[
   (left_sidebar_enabled and 1 or 0)+(right_sidebar_enabled and 1 or 0)]
   }}
-  <style type="text/css" media="screen">
+  <style type="text/css">
+    .dropdown-menu li a {
+        display: block;
+    }
+
+    .dropdown-menu li a:hover {
+        /* background-color: #9bd5f7; */
+        color: #333;
+        display: block;
+    }
+
     .navbar-nav>.user-menu>.dropdown-menu>li.user-header>a>img,
     #update_avatar > div > div > div.modal-body > div > a > img {
         z-index: 5;
